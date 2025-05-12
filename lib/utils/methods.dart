@@ -178,6 +178,13 @@ Future<void> makePhoneCall(String url) async {
   }
 }
 
+Future<void> openMap(Uri uri) async {
+
+  if (!await launchUrl(uri)) {
+    throw Exception('Could not launch $uri');
+  }
+}
+
 Future<String> createFolderInAppDocDir() async {
 
 //Get this App Document Directory

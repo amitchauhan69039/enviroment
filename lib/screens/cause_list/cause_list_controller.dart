@@ -24,7 +24,9 @@ class CauseListController extends GetxController {
     getCauseListData();
   }
 
-  Future<void>  getCauseListData() async{
+
+
+    Future<void>  getCauseListData() async{
 
     if(await isInternetAvailable(context)){
       FocusManager.instance.primaryFocus?.unfocus();
@@ -63,5 +65,10 @@ class CauseListController extends GetxController {
     }else{
       toastMsg("No Internet Available.");
     }
+  }
+
+
+  Future<void> onWillPop() async {
+
   }
 }

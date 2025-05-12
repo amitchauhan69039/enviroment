@@ -64,9 +64,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Text(
                                             textAlign: TextAlign.center,
-                                            "Appelatte Authority Under Water and Air Act",
+                                            "Appellate Authority Under Water and Air Act",
                                             style: styleW600S13.copyWith(fontSize: 18,
-                                                color: ColorRes.appRedColor),
+                                                color: ColorRes.white),
                                           ),
 
                                           Text(
@@ -151,6 +151,67 @@ class _HomeScreenState extends State<HomeScreen> {
                                   padding: const EdgeInsets.only(right: 5,left: 5,top: 10),
                                   child: InkWell(
                                     onTap: (){
+                                      Get.to(()=>CaseStatusScreen());
+                                    },
+                                    child: Container(
+                                      width: double.infinity,
+                                      margin: EdgeInsets.only(left: 14,right: 14),
+                                      child: Card(
+                                        elevation: 10,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                                            color: ColorRes.homeBgColor,
+                                          ),
+
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              appSizedBox(height: 10),
+                                              Card(
+                                                elevation: 10,
+                                                shape: CircleBorder(
+                                                  side: BorderSide(color:ColorRes.white,
+                                                      width: 1),
+                                                ),
+                                                child: Container(
+                                                  width: 100,
+                                                  height: 100,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: ColorRes.white,
+                                                  ),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(20.0),
+                                                    child: Image.asset(
+                                                      AssetRes.caseStatusIcon,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+
+                                              appSizedBox(height: 5),
+                                              Text(
+                                                maxLines: 2,
+                                                textAlign: TextAlign.center,
+                                                "Case Status",
+                                                style: styleW600S14.copyWith(fontSize: 22,
+                                                    color: ColorRes.black),
+                                              ),
+                                              appSizedBox(height: 10)
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 5,left: 5,top: 10),
+                                  child: InkWell(
+                                    onTap: (){
                                       Get.to(()=>FinalOrderScreen());
                                     },
                                     child: Container(
@@ -208,66 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
 
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 5,left: 5,top: 10),
-                                  child: InkWell(
-                                    onTap: (){
-                                      Get.to(()=>CaseStatusScreen());
-                                    },
-                                    child: Container(
-                                      width: double.infinity,
-                                      margin: EdgeInsets.only(left: 14,right: 14),
-                                      child: Card(
-                                        elevation: 10,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                                            color: ColorRes.homeBgColor,
-                                          ),
 
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              appSizedBox(height: 10),
-                                              Card(
-                                                elevation: 10,
-                                                shape: CircleBorder(
-                                                  side: BorderSide(color:ColorRes.white,
-                                                      width: 1),
-                                                ),
-                                                child: Container(
-                                                  width: 100,
-                                                  height: 100,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: ColorRes.white,
-                                                  ),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.all(20.0),
-                                                    child: Image.asset(
-                                                      AssetRes.caseStatusIcon,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-
-                                              appSizedBox(height: 5),
-                                              Text(
-                                                maxLines: 2,
-                                                textAlign: TextAlign.center,
-                                                "Case Status",
-                                                style: styleW600S14.copyWith(fontSize: 22,
-                                                    color: ColorRes.black),
-                                              ),
-                                              appSizedBox(height: 10)
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
 
                                 appSizedBox(height: 20),
                               ],

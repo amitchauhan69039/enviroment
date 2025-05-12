@@ -54,6 +54,7 @@ class MyApp extends StatelessWidget {
       ),
       navigatorKey: navigationKey,
       locale: getLanStrToLocale(PrefService.getString(PrefKeys.selectedLanguage)),
+
       translations: AppLocalization(),
       fallbackLocale: const Locale('en', 'US'),
       home: const StartScreen(),

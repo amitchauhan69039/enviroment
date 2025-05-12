@@ -11,7 +11,7 @@ class CauseListScreen extends StatefulWidget {
   State<CauseListScreen> createState() => _CauseListScreenState();
 }
 
-class _CauseListScreenState extends State<CauseListScreen> {
+class _CauseListScreenState extends State<CauseListScreen> with WidgetsBindingObserver{
   BuildContext? mContext;
   final CauseListController controller = Get.put(CauseListController());
 
@@ -20,8 +20,23 @@ class _CauseListScreenState extends State<CauseListScreen> {
 
   @override
   void initState() {
+
     super.initState();
 
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      Get.back();
+      Get.to(()=>CauseListScreen());
+    }
   }
 
   @override
@@ -32,7 +47,16 @@ class _CauseListScreenState extends State<CauseListScreen> {
           resizeToAvoidBottomInset: false,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(60),
-            child: GradientAppBar(title: 'Cause List'.tr),
+            child: GradientAppBar(title: 'Cause List'.tr,onBackTap: (){
+              if(controller.recordFrom!=1){
+                controller.recordFrom = controller.recordFrom-6;
+                controller.recordTo = controller.recordFrom+5;
+                controller.getCauseListData();
+              }else{
+                Navigator.pop(context);
+              }
+
+            }),
           ),
           body: GetBuilder<CauseListController>(
               id: 'cause_list_screen',
@@ -232,44 +256,59 @@ class _CauseListScreenState extends State<CauseListScreen> {
                               ),
 
                               const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Image.asset(
-                                    AssetRes.web,
-                                    height: 15,
-                                    width: 15,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Flexible(
-                                    child: Text(
-                                      maxLines: 2,
-                                      "https://appeal.harenvironment.gov.in",
-                                      style: styleW600S13.copyWith(fontSize: 8, color: ColorRes.black),
+                              InkWell(
+                                onTap: (){
+                                  makePhoneCall("https://appeal.harenvironment.gov.in");
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Image.asset(
+                                      AssetRes.web,
+                                      height: 15,
+                                      width: 15,
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(width: 10),
+                                    Flexible(
+                                      child: Text(
+                                        maxLines: 2,
+                                        "https://appeal.harenvironment.gov.in",
+                                        style: styleW600S13.copyWith(fontSize: 8, color: ColorRes.appBlueColor,
+                                            decoration: TextDecoration.underline,
+                                            decorationColor: ColorRes.appBlueColor),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
 
 
                               const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Image.asset(
-                                    AssetRes.map,
-                                    height: 15,
-                                    width: 15,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Flexible(
-                                    child: Text(
-                                      maxLines: 2,
-                                      "Appellate Authority (HSPCB) Haryana,sco- 38-39,Sector-17A,Chandigarh",
-                                      style: styleW600S13.copyWith(fontSize: 8, color: ColorRes.black),
+                              InkWell(
+                                onTap: (){
+                                  final Uri googleMapUrl = Uri.parse('https://www.google.com/maps/search/?api=1&query=${30.743684490687972},${76.78597123513326}');
+                                  openMap(googleMapUrl);
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Image.asset(
+                                      AssetRes.map,
+                                      height: 15,
+                                      width: 15,
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(width: 10),
+                                    Flexible(
+                                      child: Text(
+                                        maxLines: 2,
+                                        "Appellate Authority (HSPCB) Haryana,sco- 38-39,Sector-17A,Chandigarh",
+                                        style: styleW600S13.copyWith(fontSize: 8, color: ColorRes.appBlueColor,
+                                            decoration: TextDecoration.underline,
+                                            decorationColor: ColorRes.appBlueColor),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
 
                               const SizedBox(height: 10),
@@ -355,12 +394,24 @@ class _CauseListScreenState extends State<CauseListScreen> {
             elevation: 5,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             color: isHighlighted ? ColorRes.white : ColorRes.greyColor,
-            child: Center(
-              child: Text(
-                formattedDate,
-                textAlign: TextAlign.center,
-                style: styleW600S15.copyWith(fontSize: 22, color: ColorRes.black, height: 1),
-              ),
+            child: Stack(
+              children: [
+                Center(
+                  child: Text(
+                    formattedDate,
+                    textAlign: TextAlign.center,
+                    style: styleW600S15.copyWith(fontSize: 22, color: ColorRes.black, height: 1),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Image.asset(
+                      height: 18,
+                      width: 18,
+                      AssetRes.pdf
+                  ),
+                )
+              ],
             ),
           ),
         );

@@ -34,7 +34,7 @@ class _StartScreenState extends State<StartScreen> {
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(AssetRes.splash1),
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                 ),
               ),
               child: Align(

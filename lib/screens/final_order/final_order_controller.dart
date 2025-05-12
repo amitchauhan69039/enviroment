@@ -20,7 +20,7 @@ class FinalOrderController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getFinalOrderListData();
+
   }
 
   Future<void>  getFinalOrderListData() async{

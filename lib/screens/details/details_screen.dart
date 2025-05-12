@@ -11,7 +11,7 @@ class DetailsScreen extends StatefulWidget {
   State<DetailsScreen> createState() => _DetailScreenState();
 }
 
-class _DetailScreenState extends State<DetailsScreen> {
+class _DetailScreenState extends State<DetailsScreen> with WidgetsBindingObserver{
   BuildContext? mContext;
   final DetailController controller = Get.put(DetailController());
 
@@ -20,6 +20,22 @@ class _DetailScreenState extends State<DetailsScreen> {
   void initState() {
     super.initState();
     controller.getDetailData(widget.trackingNo);
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+
+      Get.back();
+      Get.to(()=>DetailsScreen(trackingNo: widget.trackingNo));
+    }
   }
 
   @override
@@ -188,7 +204,23 @@ class _DetailScreenState extends State<DetailsScreen> {
                             "Interim Order" : "Final Order",
                           ),
 
-                          appSizedBox(height: 1.h),
+                          appSizedBox(height: 15),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              AppButton(
+                                buttonName: "Click here for Details",
+                                buttonWidth: 150,
+                                buttonHeight: 35,
+                                fontSize: 12,
+                                onButtonTap: (){
+
+                                  makePhoneCall(EndPoints.baseUrl+"/"+controller.data[index].uploadFile!);
+                                },
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -228,43 +260,58 @@ class _DetailScreenState extends State<DetailsScreen> {
 
 
                     const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image.asset(
-                          AssetRes.web,
-                          height: 15,
-                          width: 15,
-                        ),
-                        const SizedBox(width: 10),
-                        Flexible(
-                          child: Text(
-                            maxLines: 2,
-                            "https://appeal.harenvironment.gov.in",
-                            style: styleW600S13.copyWith(fontSize: 8, color: ColorRes.black),
+                    InkWell(
+                      onTap: (){
+                        makePhoneCall("https://appeal.harenvironment.gov.in");
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            AssetRes.web,
+                            height: 15,
+                            width: 15,
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 10),
+                          Flexible(
+                            child: Text(
+                              maxLines: 2,
+                              "https://appeal.harenvironment.gov.in",
+                              style: styleW600S13.copyWith(fontSize: 8, color: ColorRes.appBlueColor,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: ColorRes.appBlueColor),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
 
                     const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image.asset(
-                          AssetRes.map,
-                          height: 15,
-                          width: 15,
-                        ),
-                        const SizedBox(width: 10),
-                        Flexible(
-                          child: Text(
-                            maxLines: 2,
-                            "Appellate Authority (HSPCB) Haryana,sco- 38-39,Sector-17A,Chandigarh",
-                            style: styleW600S13.copyWith(fontSize: 8, color: ColorRes.black),
+                    InkWell(
+                      onTap: (){
+                        final Uri googleMapUrl = Uri.parse('https://www.google.com/maps/search/?api=1&query=${30.743684490687972},${76.78597123513326}');
+                        openMap(googleMapUrl);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            AssetRes.map,
+                            height: 15,
+                            width: 15,
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 10),
+                          Flexible(
+                            child: Text(
+                              maxLines: 2,
+                              "Appellate Authority (HSPCB) Haryana,sco- 38-39,Sector-17A,Chandigarh",
+                              style: styleW600S13.copyWith(fontSize: 8, color: ColorRes.appBlueColor,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: ColorRes.appBlueColor),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
 
                     const SizedBox(height: 10),
@@ -337,7 +384,7 @@ class LabelValueRow1 extends StatelessWidget {
             margin: margin,
             child: Text(
               (label == 'null') ? '-' : label ?? '-',
-              style: labelStyle ?? styleW700S42.copyWith(color: ColorRes.yellowColor,fontSize: 16),
+              style: labelStyle ?? styleW700S42.copyWith(color: ColorRes.appbarDarkColor,fontSize: 16),
             ),
           ),
         ),

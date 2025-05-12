@@ -8,23 +8,51 @@ class FinalOrderScreen extends StatefulWidget {
   State<FinalOrderScreen> createState() => _FinalOrderScreenState();
 }
 
-class _FinalOrderScreenState extends State<FinalOrderScreen> {
+class _FinalOrderScreenState extends State<FinalOrderScreen> with WidgetsBindingObserver{
   BuildContext? mContext;
   final FinalOrderController controller = Get.put(FinalOrderController());
 
 
   @override
   void initState() {
+    setState(() {
+      controller.getFinalOrderListData();
+    });
+
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      Get.back();
+      Get.to(()=>FinalOrderScreen());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       child: Scaffold(
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(60),
-            child: GradientAppBar(title: 'Final Order'.tr),
+            child: GradientAppBar(title: 'Final Order'.tr,onBackTap: (){
+              if(controller.recordFrom!=1){
+                controller.recordFrom = controller.recordFrom-3;
+                controller.recordTo = controller.recordTo-3;
+                controller.getFinalOrderListData();
+              }else{
+                Navigator.pop(context);
+              }
+
+            }),
           ),
           body: GetBuilder<FinalOrderController>(
               id: 'final_order_screen',
@@ -59,7 +87,6 @@ class _FinalOrderScreenState extends State<FinalOrderScreen> {
                                     color: ColorRes.white),
                                 child: Stack(
                                   children: [
-
                                     Padding(
                                       padding: const EdgeInsets.only(left: 10,right: 10),
                                       child: Align(
@@ -201,43 +228,58 @@ class _FinalOrderScreenState extends State<FinalOrderScreen> {
                                   ),
 
                                   const SizedBox(height: 10),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Image.asset(
-                                        AssetRes.web,
-                                        height: 15,
-                                        width: 15,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Flexible(
-                                        child: Text(
-                                          maxLines: 2,
-                                          "https://appeal.harenvironment.gov.in",
-                                          style: styleW600S13.copyWith(fontSize: 8, color: ColorRes.black),
+                                  InkWell(
+                                    onTap: (){
+                                      makePhoneCall("https://appeal.harenvironment.gov.in");
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Image.asset(
+                                          AssetRes.web,
+                                          height: 15,
+                                          width: 15,
                                         ),
-                                      ),
-                                    ],
+                                        const SizedBox(width: 10),
+                                        Flexible(
+                                          child: Text(
+                                            maxLines: 2,
+                                            "https://appeal.harenvironment.gov.in",
+                                            style: styleW600S13.copyWith(fontSize: 8, color: ColorRes.appBlueColor,
+                                                decoration: TextDecoration.underline,
+                                                decorationColor: ColorRes.appBlueColor),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                     
                                   const SizedBox(height: 10),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Image.asset(
-                                        AssetRes.map,
-                                        height: 15,
-                                        width: 15,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Flexible(
-                                        child: Text(
-                                          maxLines: 2,
-                                          "Appellate Authority (HSPCB) Haryana,sco- 38-39,Sector-17A,Chandigarh",
-                                          style: styleW600S13.copyWith(fontSize: 8, color: ColorRes.black),
+                                  InkWell(
+                                    onTap: (){
+                                      final Uri googleMapUrl = Uri.parse('https://www.google.com/maps/search/?api=1&query=${30.743684490687972},${76.78597123513326}');
+                                      openMap(googleMapUrl);
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Image.asset(
+                                          AssetRes.map,
+                                          height: 15,
+                                          width: 15,
                                         ),
-                                      ),
-                                    ],
+                                        const SizedBox(width: 10),
+                                        Flexible(
+                                          child: Text(
+                                            maxLines: 2,
+                                            "Appellate Authority (HSPCB) Haryana,sco- 38-39,Sector-17A,Chandigarh",
+                                            style: styleW600S13.copyWith(fontSize: 8, color: ColorRes.appBlueColor,
+                                                decoration: TextDecoration.underline,
+                                                decorationColor: ColorRes.appBlueColor),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                     
                                   const SizedBox(height: 10),
@@ -310,7 +352,7 @@ class _FinalOrderScreenState extends State<FinalOrderScreen> {
                                 textAlign: TextAlign.start,
                                 "Reg No./ year",
                                 style: styleW500S12.copyWith(fontSize: 22,
-                                    color: ColorRes.yellowColor),
+                                    color: ColorRes.appbarDarkColor),
                               ),
                             ),
 
@@ -337,7 +379,7 @@ class _FinalOrderScreenState extends State<FinalOrderScreen> {
                                 textAlign: TextAlign.start,
                                 "Appealant",
                                 style: styleW500S12.copyWith(fontSize: 22,
-                                    color: ColorRes.yellowColor),
+                                    color: ColorRes.appbarDarkColor),
                               ),
                             ),
 
@@ -363,7 +405,7 @@ class _FinalOrderScreenState extends State<FinalOrderScreen> {
                                 textAlign: TextAlign.start,
                                 "Respondant",
                                 style: styleW500S12.copyWith(fontSize: 22,
-                                    color: ColorRes.yellowColor),
+                                    color: ColorRes.appbarDarkColor),
                               ),
                             ),
 
@@ -389,7 +431,7 @@ class _FinalOrderScreenState extends State<FinalOrderScreen> {
                                 textAlign: TextAlign.start,
                                 "Final Order Date",
                                 style: styleW500S12.copyWith(fontSize: 22,
-                                    color: ColorRes.yellowColor),
+                                    color: ColorRes.appbarDarkColor),
                               ),
                             ),
 
@@ -402,6 +444,23 @@ class _FinalOrderScreenState extends State<FinalOrderScreen> {
                                     color: ColorRes.black),
                               ),
                             )
+                          ],
+                        ),
+
+                        appSizedBox(height: 15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            AppButton(
+                              buttonName: "Click here for Details",
+                              buttonWidth: 170,
+                              buttonHeight: 40,
+                              fontSize: 13,
+                              onButtonTap: (){
+                                makePhoneCall(EndPoints.baseUrl+controller.data[index].filePath!);
+                              },
+                            ),
                           ],
                         ),
 
